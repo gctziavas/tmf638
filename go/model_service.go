@@ -11,6 +11,8 @@ package tmf638
 
 import (
 	"time"
+
+	"github.com/go-openapi/swag"
 )
 
 // Service - Service is a base class for defining the Service hierarchy. All Services are characterized as either being possibly visible and usable by a Customer or not. This gives rise to the two subclasses of Service: CustomerFacingService and ResourceFacingService.
@@ -37,7 +39,7 @@ type Service struct {
 	// If true, the service is a ServiceBundle which regroup a service hierachy. If false, the service is a 'atomic' service (hierachy leaf).
 	IsBundle bool `json:"isBundle,omitempty"`
 
-	// If FALSE and hasStarted is FALSE, this particular Service has NOT been enabled for use - if FALSE and hasStarted is TRUE then the service has failed 
+	// If FALSE and hasStarted is FALSE, this particular Service has NOT been enabled for use - if FALSE and hasStarted is TRUE then the service has failed
 	IsServiceEnabled bool `json:"isServiceEnabled,omitempty"`
 
 	// If TRUE, this Service can be changed without affecting any other services
@@ -58,7 +60,7 @@ type Service struct {
 	// This attribute is an enumerated integer that indicates how the Service is started, such as: 0: Unknown; 1: Automatically by the managed environment; 2: Automatically by the owning device; 3: Manually by the Provider of the Service; 4: Manually by a Customer of the Provider; 5: Any of the above
 	StartMode string `json:"startMode,omitempty"`
 
-	// A list of feature associated with this service 
+	// A list of feature associated with this service
 	Feature []Feature `json:"feature,omitempty"`
 
 	// A list of notes made on this service
@@ -67,13 +69,13 @@ type Service struct {
 	// A list of places (Place [*]). Used to define a place useful for the service (for example a geographical place whre the service is installed)
 	Place []RelatedPlaceRefOrValue `json:"place,omitempty"`
 
-	// A list of related  entity in relationship with this service 
+	// A list of related  entity in relationship with this service
 	RelatedEntity []RelatedEntityRefOrValue `json:"relatedEntity,omitempty"`
 
 	// A list of related party references (RelatedParty [*]). A related party defines party or party role linked to a specific entity
 	RelatedParty []RelatedParty `json:"relatedParty,omitempty"`
 
-	// A list of characteristics that characterize this service (ServiceCharacteristic [*]) 
+	// A list of characteristics that characterize this service (ServiceCharacteristic [*])
 	ServiceCharacteristic []Characteristic `json:"serviceCharacteristic,omitempty"`
 
 	// A list of service order items related to this service
@@ -161,4 +163,22 @@ func AssertRecurseServiceRequired(objSlice interface{}) error {
 		}
 		return AssertServiceRequired(aService)
 	})
+}
+
+// MarshalBinary interface implementation
+func (m *Service) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *Service) UnmarshalBinary(b []byte) error {
+	var res ServiceCatalog
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
+	return nil
 }

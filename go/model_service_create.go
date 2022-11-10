@@ -12,6 +12,7 @@ package tmf638
 import (
 	"time"
 
+	"github.com/go-openapi/swag"
 	"github.com/google/uuid"
 )
 
@@ -203,4 +204,22 @@ func ServiceCreateToService(screate ServiceCreate) Service {
 	svc.SupportingService = screate.SupportingService
 
 	return svc
+}
+
+// MarshalBinary interface implementation
+func (m *ServiceCreate) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *ServiceCreate) UnmarshalBinary(b []byte) error {
+	var res ServiceCatalog
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
+	return nil
 }
