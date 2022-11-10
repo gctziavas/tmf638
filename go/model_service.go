@@ -175,7 +175,7 @@ func (m *Service) MarshalBinary() ([]byte, error) {
 
 // UnmarshalBinary interface implementation
 func (m *Service) UnmarshalBinary(b []byte) error {
-	var res ServiceCatalog
+	var res Service
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
