@@ -10,9 +10,9 @@
 package tmf638
 
 import (
-	"log"
-	"os/exec"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // ServiceCreate - Service is a base class for defining the Service hierarchy. All Services are characterized as either being possibly visible and usable by a Customer or not. This gives rise to the two subclasses of Service: CustomerFacingService and ResourceFacingService. Skipped properties: id,href
@@ -171,11 +171,12 @@ func AssertRecurseServiceCreateRequired(objSlice interface{}) error {
 
 func ServiceCreateToService(screate ServiceCreate) Service {
 	var svc Service
-	uuid, err := exec.Command("uuidgen").Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	svc.Id = string(uuid)
+	// uuid, err := exec.Command("uuidgen").Output()
+	// if err != nil {
+	// 	log.Fatal(err)
+	uuid := uuid.New().String()
+
+	svc.Id = uuid
 	svc.Category = screate.Category
 	svc.Description = screate.Description
 	svc.Name = screate.Name

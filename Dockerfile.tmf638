@@ -10,5 +10,5 @@ RUN go build -a -installsuffix cgo -o tmf638 .
 
 FROM scratch AS runtime
 COPY --from=build /go/src/tmf638 ./
-EXPOSE 8638
+EXPOSE 8638:8638
 ENTRYPOINT ["./tmf638"]
